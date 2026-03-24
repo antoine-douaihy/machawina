@@ -52,7 +52,8 @@ const menuRows = [
         ]
     },
     {
-        // ROW 2: Aligns 1KG and Side Dishes against Alcoholic and Hot Beverages
+        // ROW 2A: 1KG against Alcoholic Drinks
+        class: "gap-row",
         left: [
             {
                 type: 'category', id: "1kg_on_demand", title_en: "1KG / On Demand", title_ar: "كيلو / حسب الطلب",
@@ -65,14 +66,6 @@ const menuRows = [
                     { name_en: "Lamb Meat", name_ar: "لحمة غنم", price: "42.0" },
                     { name_en: "Kafta", name_ar: "كفتة", price: "33.0" },
                     { name_en: "Mqaneq", name_ar: "مقانق", price: "33.0" }
-                ]
-            },
-            {
-                type: 'category', id: "side_dishes", title_en: "Side Dishes", title_ar: "أطباق جانبية",
-                items: [
-                    { name_en: "Eres Kebbeh", name_ar: "قرص دهن", price: "5.0" },
-                    { name_en: "Tabbouleh", name_ar: "تبولة", price: "7.0" },
-                    { name_en: "Castaletta", name_ar: "کاستالیتا", price: "18.0" }
                 ]
             }
         ],
@@ -87,7 +80,22 @@ const menuRows = [
                     { name_en: "Wine", name_ar: "نبيذ", price: { gls: "X", btl: "15" } },
                     { name_en: "Arak", name_ar: "عرق", price: { gls: "X", btl: "15" } }
                 ]
-            },
+            }
+        ]
+    },
+    {
+        // ROW 2B: Aligns Side Dishes against Hot Beverages
+        left: [
+            {
+                type: 'category', id: "side_dishes", title_en: "Side Dishes", title_ar: "أطباق جانبية",
+                items: [
+                    { name_en: "Eres Kebbeh", name_ar: "قرص دهن", price: "5.0" },
+                    { name_en: "Tabbouleh", name_ar: "تبولة", price: "7.0" },
+                    { name_en: "Castaletta", name_ar: "کاستالیتا", price: "18.0" }
+                ]
+            }
+        ],
+        right: [
             {
                 type: 'category', id: "hot_beverages", title_en: "Hot Beverages", title_ar: "مشروبات ساخنة",
                 items: [
@@ -123,9 +131,11 @@ const menuRows = [
     }
 ];
 
-let currentLang = 'en';
+let currentLang = 'ar';
 const container = document.getElementById('menu-container');
-const langToggleBtn = document.getElementById('lang-toggle');
+const langToggleContainer = document.getElementById('lang-toggle');
+const arOption = document.getElementById('lang-ar');
+const enOption = document.getElementById('lang-en');
 
 function renderRegularItem(item, parentDiv) {
     const div = document.createElement('div');
@@ -203,23 +213,38 @@ function renderColumnBlocks(blocks, colDiv) {
         const catDiv = document.createElement('div');
         catDiv.className = 'category-block';
 
+        const titleRow = document.createElement('div');
+        titleRow.className = 'category-title-row';
+
         const title = document.createElement('h2');
         title.className = 'main-category-title';
         title.innerHTML = `<span>${currentLang === 'en' ? block.title_en : block.title_ar}</span>`;
-        catDiv.appendChild(title);
+        titleRow.appendChild(title);
+
+        if (block.showCols) {
+            const headerPrices = document.createElement('div');
+            headerPrices.className = 'header-prices';
+            
+            const glsSpan = document.createElement('span');
+            glsSpan.className = 'price-col';
+            glsSpan.textContent = 'GLS';
+            
+            const btlSpan = document.createElement('span');
+            btlSpan.className = 'price-col';
+            btlSpan.textContent = 'BTL';
+            
+            headerPrices.appendChild(glsSpan);
+            headerPrices.appendChild(btlSpan);
+            titleRow.appendChild(headerPrices);
+        }
+
+        catDiv.appendChild(titleRow);
 
         if (block.banner_en) {
             const bannerDiv = document.createElement('div');
             bannerDiv.className = 'delivery-banner';
             bannerDiv.textContent = currentLang === 'en' ? block.banner_en : block.banner_ar;
             catDiv.appendChild(bannerDiv);
-        }
-
-        if (block.showCols) {
-            const headerRow = document.createElement('div');
-            headerRow.className = 'col-header-row';
-            headerRow.innerHTML = `<span class="header-text">${currentLang === 'en' ? '' : ''}</span><span class="price-col">${currentLang === 'en' ? 'GLS' : 'GLS'}</span><span class="price-col">${currentLang === 'en' ? 'BTL' : 'BTL'}</span>`;
-            catDiv.appendChild(headerRow);
         }
 
         if (block.subcategories) {
@@ -244,6 +269,7 @@ function renderFullMenu() {
     menuRows.forEach(row => {
         const rowDiv = document.createElement('div');
         rowDiv.className = 'menu-row';
+        if (row.class) rowDiv.classList.add(row.class);
 
         const leftCol = document.createElement('div');
         leftCol.className = 'column left-column';
@@ -259,15 +285,17 @@ function renderFullMenu() {
     });
 }
 
-langToggleBtn.addEventListener('click', () => {
+langToggleContainer.addEventListener('click', () => {
     if (currentLang === 'en') {
         currentLang = 'ar';
-        langToggleBtn.textContent = 'English';
         document.body.classList.add('rtl');
+        arOption.classList.add('active');
+        enOption.classList.remove('active');
     } else {
         currentLang = 'en';
-        langToggleBtn.textContent = 'عربي';
         document.body.classList.remove('rtl');
+        enOption.classList.add('active');
+        arOption.classList.remove('active');
     }
     renderFullMenu();
 });
