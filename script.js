@@ -3,7 +3,7 @@ const menuRows = [
     {
         // ROW 1: Aligns Flatbreads/Fries against Sandwiches
         left: [
-            { type: 'logo', src: 'Logo.png' },
+            { type: 'logo', src: 'img/Logo.png' }, // UPDATED: Now points to the img folder
             {
                 type: 'category', id: "flatbreads", title_en: "Flatbreads", title_ar: "بالعجين",
                 items: [
