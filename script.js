@@ -1,29 +1,27 @@
-let currentLang = 'en';
-let menuRows = []; // Starts empty, will be filled by the SQLite database!
+let currentLang = 'ar'; // Default set to Arabic based on your friend's setup
+let menuRows = []; // Starts empty, filled by SQLite
 
 const container = document.getElementById('menu-container');
-const langToggleBtn = document.getElementById('lang-toggle');
+const langToggleContainer = document.getElementById('lang-toggle');
+const arOption = document.getElementById('lang-ar');
+const enOption = document.getElementById('lang-en');
 
-// 1. Fetch the JSON data from your new Node.js Server
+// 1. Fetch from Database
 fetch('http://localhost:3000/api/menu')
     .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+        if (!response.ok) throw new Error('Network response was not ok');
         return response.json();
     })
     .then(data => {
-        // 2. Save the data and build the menu
         menuRows = data;
         renderFullMenu();
     })
     .catch(error => {
-        console.error('Error loading menu from database:', error);
-        container.innerHTML = `<h3 style="color: red; text-align: center; padding: 40px;">Error loading menu data. Make sure your Node.js server is running!</h3>`;
+        console.error('Error loading menu:', error);
+        container.innerHTML = `<h3 style="color: red; text-align: center; padding: 40px;">Error loading menu data. Is your Node.js server running?</h3>`;
     });
 
-
-// --- RENDER FUNCTIONS ---
+// --- RENDER FUNCTIONS (Integrated from your friend's code) ---
 
 function renderRegularItem(item, parentDiv) {
     const div = document.createElement('div');
@@ -89,7 +87,6 @@ function renderCategoryItems(items, parentDiv, showColsFlag) {
 
 function renderColumnBlocks(blocks, colDiv) {
     blocks.forEach(block => {
-        // Render Logo
         if (block.type === 'logo') {
             const img = document.createElement('img');
             img.src = block.src;
@@ -102,12 +99,33 @@ function renderColumnBlocks(blocks, colDiv) {
         const catDiv = document.createElement('div');
         catDiv.className = 'category-block';
 
+        const titleRow = document.createElement('div');
+        titleRow.className = 'category-title-row';
+
         const title = document.createElement('h2');
         title.className = 'main-category-title';
         title.innerHTML = `<span>${currentLang === 'en' ? block.title_en : block.title_ar}</span>`;
-        catDiv.appendChild(title);
+        titleRow.appendChild(title);
 
-        // Render Delivery Banner
+        if (block.showCols) {
+            const headerPrices = document.createElement('div');
+            headerPrices.className = 'header-prices';
+
+            const glsSpan = document.createElement('span');
+            glsSpan.className = 'price-col';
+            glsSpan.textContent = 'GLS';
+
+            const btlSpan = document.createElement('span');
+            btlSpan.className = 'price-col';
+            btlSpan.textContent = 'BTL';
+
+            headerPrices.appendChild(glsSpan);
+            headerPrices.appendChild(btlSpan);
+            titleRow.appendChild(headerPrices);
+        }
+
+        catDiv.appendChild(titleRow);
+
         if (block.banner_en) {
             const bannerDiv = document.createElement('div');
             bannerDiv.className = 'delivery-banner';
@@ -115,15 +133,6 @@ function renderColumnBlocks(blocks, colDiv) {
             catDiv.appendChild(bannerDiv);
         }
 
-        // Render Alcohol Columns (GLS/BTL)
-        if (block.showCols) {
-            const headerRow = document.createElement('div');
-            headerRow.className = 'col-header-row';
-            headerRow.innerHTML = `<span class="header-text">${currentLang === 'en' ? '' : ''}</span><span class="price-col">${currentLang === 'en' ? 'GLS' : 'GLS'}</span><span class="price-col">${currentLang === 'en' ? 'BTL' : 'BTL'}</span>`;
-            catDiv.appendChild(headerRow);
-        }
-
-        // Render Subcategories or Items
         if (block.subcategories) {
             block.subcategories.forEach(sub => {
                 const subTitle = document.createElement('h3');
@@ -146,6 +155,7 @@ function renderFullMenu() {
     menuRows.forEach(row => {
         const rowDiv = document.createElement('div');
         rowDiv.className = 'menu-row';
+        if (row.class) rowDiv.classList.add(row.class);
 
         const leftCol = document.createElement('div');
         leftCol.className = 'column left-column';
@@ -161,15 +171,17 @@ function renderFullMenu() {
     });
 }
 
-langToggleBtn.addEventListener('click', () => {
+langToggleContainer.addEventListener('click', () => {
     if (currentLang === 'en') {
         currentLang = 'ar';
-        langToggleBtn.textContent = 'English';
         document.body.classList.add('rtl');
+        arOption.classList.add('active');
+        enOption.classList.remove('active');
     } else {
         currentLang = 'en';
-        langToggleBtn.textContent = 'عربي';
         document.body.classList.remove('rtl');
+        enOption.classList.add('active');
+        arOption.classList.remove('active');
     }
     renderFullMenu();
 });

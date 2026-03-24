@@ -50,6 +50,7 @@
     ]
   },
   {
+    "class": "gap-row",
     "left": [
       {
         "type": "category", "id": "1kg_on_demand", "title_en": "1KG / On Demand", "title_ar": "كيلو / حسب الطلب",
@@ -62,14 +63,6 @@
           { "name_en": "Lamb Meat", "name_ar": "لحمة غنم", "price": "42.0" },
           { "name_en": "Kafta", "name_ar": "كفتة", "price": "33.0" },
           { "name_en": "Mqaneq", "name_ar": "مقانق", "price": "33.0" }
-        ]
-      },
-      {
-        "type": "category", "id": "side_dishes", "title_en": "Side Dishes", "title_ar": "أطباق جانبية",
-        "items": [
-          { "name_en": "Eres Kebbeh", "name_ar": "قرص دهن", "price": "5.0" },
-          { "name_en": "Tabbouleh", "name_ar": "تبولة", "price": "7.0" },
-          { "name_en": "Castaletta", "name_ar": "کاستالیتا", "price": "18.0" }
         ]
       }
     ],
@@ -84,7 +77,21 @@
           { "name_en": "Wine", "name_ar": "نبيذ", "price": { "gls": "X", "btl": "15" } },
           { "name_en": "Arak", "name_ar": "عرق", "price": { "gls": "X", "btl": "15" } }
         ]
-      },
+      }
+    ]
+  },
+  {
+    "left": [
+      {
+        "type": "category", "id": "side_dishes", "title_en": "Side Dishes", "title_ar": "أطباق جانبية",
+        "items": [
+          { "name_en": "Eres Kebbeh", "name_ar": "قرص دهن", "price": "5.0" },
+          { "name_en": "Tabbouleh", "name_ar": "تبولة", "price": "7.0" },
+          { "name_en": "Castaletta", "name_ar": "کاستالیتا", "price": "18.0" }
+        ]
+      }
+    ],
+    "right": [
       {
         "type": "category", "id": "hot_beverages", "title_en": "Hot Beverages", "title_ar": "مشروبات ساخنة",
         "items": [

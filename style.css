@@ -23,23 +23,34 @@ body {
 }
 
 /* --- Language Button --- */
-.lang-btn {
+.lang-toggle-container {
     position: absolute;
     top: 20px;
     right: 20px;
-    font-family: var(--font-section);
-    background-color: var(--bg-color);
-    color: var(--navy);
+    display: flex;
+    direction: ltr;
     border: 2px solid var(--navy);
-    padding: 4px 20px;
-    font-size: 1.1rem;
     border-radius: 4px;
+    background-color: var(--bg-color);
     cursor: pointer;
+    font-family: var(--font-section);
     font-weight: 700;
     z-index: 10;
+    overflow: hidden;
 }
 
-.lang-btn:hover { background-color: var(--navy); color: white; }
+.lang-option {
+    padding: 4px 15px;
+    color: var(--navy);
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.lang-option.active {
+    background-color: var(--navy);
+    color: #FFFFFF;
+}
 
 /* --- Menu Layout --- */
 .menu-page {
@@ -56,6 +67,10 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     margin-bottom: 70px;
+}
+
+.menu-row.gap-row {
+    margin-bottom: 30px;
 }
 
 .column {
@@ -76,11 +91,17 @@ body {
     width: 100%;
 }
 
+.category-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+
 .main-category-title {
     font-family: var(--font-section);
     font-size: 1.8rem;
     color: var(--navy);
-    margin-bottom: 20px;
     line-height: 1.2;
 }
 
@@ -105,18 +126,14 @@ body {
     padding-bottom: 2px;
 }
 
-/* --- DELIVERY BANNER STYLING (FIXED COLOR) --- */
+/* --- DELIVERY BANNER STYLING --- */
 .delivery-banner {
-    color: #FFFFFF; /* White text */
-    background-color: var(--orange); /* Brand Orange background */
+    color: var(--orange);
     font-weight: 700;
     text-transform: uppercase;
     font-size: 0.85rem;
-    padding: 8px 15px;
-    border-radius: 4px;
-    display: inline-block;
-    margin-bottom: 20px;
-    margin-top: -5px;
+    margin-bottom: 12px;
+    margin-top: -12px;
     letter-spacing: 0.5px;
 }
 
@@ -155,19 +172,20 @@ body {
 }
 
 /* --- DUAL-PRICE COLUMN STYLING (GLS/BTL) --- */
-.col-header-row {
+.header-prices {
     display: flex;
-    justify-content: flex-end;
     gap: 15px;
     font-weight: 700;
     font-size: 0.95rem;
     color: var(--navy);
-    margin-bottom: 10px;
-    margin-top: -5px;
+    padding-bottom: 6px;
 }
 
-.col-header-row .header-text { margin-right: auto; color: var(--navy); }
-.col-header-row span.price-col { width: 50px; text-align: right; color: var(--navy); }
+.header-prices span.price-col {
+    width: 50px;
+    text-align: center;
+    color: var(--navy);
+}
 
 .item-with-cols {
     display: flex;
@@ -184,12 +202,12 @@ body {
 
 .item-with-cols .prices .item-price {
     width: 50px;
-    text-align: right;
+    text-align: center;
 }
 
 /* --- RTL (Arabic) Support --- */
 body.rtl { direction: rtl; }
-body.rtl .lang-btn { right: auto; left: 20px; }
+body.rtl .delivery-banner { font-size: 1rem; }
 
 
 /* ==============================================================================
@@ -197,23 +215,26 @@ body.rtl .lang-btn { right: auto; left: 20px; }
 ============================================================================== */
 @media (max-width: 768px) {
     .menu-row { gap: 15px; margin-bottom: 40px; }
+    .menu-row.gap-row { margin-bottom: 20px; }
     .column { gap: 20px; }
     .menu-page { padding: 50px 10px 30px 10px; }
 
     .main-logo { max-width: 150px; }
 
-    .main-category-title { font-size: 1.1rem; margin-bottom: 12px; }
+    .category-title-row { margin-bottom: 12px; }
+    .main-category-title { font-size: 1.1rem; }
     .sub-category-title { font-size: 0.8rem; margin-top: 15px; margin-bottom: 8px; }
-    .item-name, .col-header-row { font-size: 0.75rem; }
+    .item-name, .header-prices { font-size: 0.75rem; }
     .item-price { font-size: 0.75rem; }
-    .delivery-banner { font-size: 0.7rem; padding: 6px 10px; }
+    .delivery-banner { font-size: 0.75rem; margin-top: -6px; margin-bottom: 8px; }
+    body.rtl .delivery-banner { font-size: 0.85rem; }
 
     .menu-item, .item-with-cols { margin-bottom: 8px; }
     .item-dots { margin: 0 4px; border-bottom-width: 1px; top: -4px; min-width: 5px; }
 
-    .col-header-row, .item-with-cols .prices { gap: 8px; }
-    .col-header-row span.price-col, .item-with-cols .prices .item-price { width: 35px; }
+    .header-prices, .item-with-cols .prices { gap: 8px; }
+    .header-prices span.price-col, .item-with-cols .prices .item-price { width: 35px; }
 
-    .lang-btn { top: 10px; right: 10px; font-size: 0.8rem; padding: 3px 12px; }
-    body.rtl .lang-btn { right: auto; left: 10px; }
+    .lang-toggle-container { top: 10px; right: 10px; }
+    .lang-option { font-size: 0.9rem; padding: 3px 12px; }
 }
